@@ -19,6 +19,13 @@
     "build": "npm run clean && run-p build:cjs build:esm",
     "build:cjs": "tsc -p tsconfig.json -m CommonJS --outDir dist/cjs",
     "build:esm": "tsc -p tsconfig.json -m ESNext --outDir dist/esm",
-    "clean": "rm -rf ./dist"
+    "clean": "rm -rf ./dist",
+    "test": "vitest --run",
+    "test:coverage": "vitest --coverage",
+    "test:watch": "vitest"
+  },
+  "devDependencies": {
+    "node-fetch": "^3.2.10",
+    "vitest": "^0.22.1"
   }
 }
