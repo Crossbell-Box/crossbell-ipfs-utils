@@ -1,0 +1,24 @@
+{
+  "name": "@crossbell/ipfs-gateway-sw",
+  "version": "0.0.1",
+  "license": "MIT",
+  "repository": "github:Crossbell-Box/crossbell-monorepo",
+  "bugs": "https://github.com/Crossbell-Box/crossbell-monorepo/issues",
+  "homepage": "https://github.com/Crossbell-Box/crossbell-monorepo#readme",
+  "author": "Natural Selection Labs",
+  "keywords": [],
+  "main": "dist/index.js",
+  "files": [
+    "dist",
+    "package.json"
+  ],
+  "scripts": {
+    "build": "pnpm run build:base --minify",
+    "build:base": "esbuild src/index.ts --outfile=dist/index.js --bundle --format=iife",
+    "clean": "rm -rf ./dist",
+    "dev": "pnpm run build:base --watch"
+  },
+  "dependencies": {
+    "@crossbell/ipfs-fetch": "workspace:*"
+  }
+}
