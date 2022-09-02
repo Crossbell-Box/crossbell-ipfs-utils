@@ -2,6 +2,7 @@ import { ipfsFetch, IpfsUrl } from '@crossbell/ipfs-fetch'
 
 const typedSelf = self as unknown as ServiceWorkerGlobalScope
 
+// eslint-disable-next-line no-console
 console.log('v1')
 
 typedSelf.addEventListener('install', (event) => {
