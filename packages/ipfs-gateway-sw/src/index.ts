@@ -2,8 +2,11 @@ import { ipfsFetch, IpfsUrl } from '@crossbell/ipfs-fetch'
 
 const typedSelf = self as unknown as ServiceWorkerGlobalScope
 
+declare const PKG_VERSION: string // Injected in build phase
+declare const BUILD_TIME: string // Injected in build phase
+
 // eslint-disable-next-line no-console
-console.log('v1')
+console.log(`version: ${PKG_VERSION}; build at: ${BUILD_TIME}`)
 
 typedSelf.addEventListener('install', (event) => {
   event.waitUntil(typedSelf.skipWaiting())

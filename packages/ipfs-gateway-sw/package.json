@@ -13,10 +13,10 @@
     "package.json"
   ],
   "scripts": {
-    "build": "pnpm run build:base --minify",
-    "build:base": "esbuild src/index.ts --outfile=dist/index.js --bundle --format=iife",
-    "clean": "rm -rf ./dist",
-    "dev": "pnpm run build:base --watch"
+    "build": "node build.js --minify",
+    "build:dev": "node build.js",
+    "build:watch": "node build.js --watch",
+    "clean": "rm -rf ./dist"
   },
   "dependencies": {
     "@crossbell/ipfs-fetch": "workspace:*"
