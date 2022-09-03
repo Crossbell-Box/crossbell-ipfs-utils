@@ -1,4 +1,5 @@
 import React from 'react'
+import { useIsomorphicLayoutEffect } from 'react-use'
 
 export type ResourceCardProps = {
   cid: string
@@ -7,16 +8,26 @@ export type ResourceCardProps = {
 }
 
 export function ImgCard({ cid, src, alt }: ResourceCardProps) {
-  const startTime = React.useMemo(() => Date.now(), [])
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  const startTime = React.useMemo(() => Date.now(), [src])
   const trimmedCID = React.useMemo(() => cid.replace(/^(\w{2})\w+(\w{2})$/, '$1...$2'), [cid])
 
   const [duration, setDuration] = React.useState(0)
+
+  const imgRef = React.useRef<HTMLImageElement>(null)
+
+  useIsomorphicLayoutEffect(() => {
+    if (imgRef.current?.complete) {
+      setDuration(Date.now() - startTime)
+    }
+  }, [imgRef, startTime])
 
   return (
     <div className="flex flex-col">
       <div className="bg-slate-200 rounded-md mb-2">
         {/* eslint-disable-next-line @next/next/no-img-element */}
         <img
+          ref={imgRef}
           className="w-full aspect-square object-contain"
           src={src}
           alt={alt}
@@ -25,7 +36,7 @@ export function ImgCard({ cid, src, alt }: ResourceCardProps) {
       </div>
       <p className="m-0 font-mono text-sm flex items-center">
         {duration ? (
-          duration
+          `${duration}ms`
         ) : (
           <svg
             className="animate-spin mr-1 h-4 w-4 text-teal-700"
@@ -48,7 +59,6 @@ export function ImgCard({ cid, src, alt }: ResourceCardProps) {
             />
           </svg>
         )}
-        <span>ms</span>
       </p>
       <a href={src} target="_blank" className="hover:underline" rel="noreferrer">
         <p className="m-0 break-all font-mono text-xs opacity-60">{src.replace(cid, trimmedCID)}</p>
