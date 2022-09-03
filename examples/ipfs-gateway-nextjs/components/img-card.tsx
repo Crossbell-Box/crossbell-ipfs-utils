@@ -31,6 +31,7 @@ export function ImgCard({ cid, src, alt }: ResourceCardProps) {
           className="w-full aspect-square object-contain"
           src={src}
           alt={alt}
+          loading="lazy"
           onLoad={() => setDuration(Date.now() - startTime)}
         />
       </div>

@@ -1,6 +1,7 @@
 import type { GetStaticProps } from 'next'
 import React from 'react'
 import { useIsomorphicLayoutEffect } from 'react-use'
+import { IpfsGateway } from '@crossbell/ipfs-gateway'
 
 import {
   DEFAULT_IPFS_GATEWAYS,
@@ -8,8 +9,9 @@ import {
   parseIpfsInfo,
 } from '@crossbell/ipfs-fetch'
 
-import { ipfsGateway } from '../../ipfs-gateway'
 import { ImgCard } from '../../components'
+
+const ipfsGateway = new IpfsGateway()
 
 const Home = ({ cid }: { cid: string }) => {
   const ipfsUrl = `ipfs://${cid}` as const

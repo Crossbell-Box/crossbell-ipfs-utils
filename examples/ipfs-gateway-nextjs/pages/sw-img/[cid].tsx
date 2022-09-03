@@ -1,5 +1,6 @@
 import type { GetStaticProps } from 'next'
 import React from 'react'
+import { IpfsSwGateway } from '@crossbell/ipfs-gateway'
 
 import {
   DEFAULT_IPFS_GATEWAYS,
@@ -7,8 +8,9 @@ import {
   parseIpfsInfo,
 } from '@crossbell/ipfs-fetch'
 
-import { ipfsSwGateway } from '../../ipfs-gateway'
 import { ImgCard } from '../../components'
+
+const ipfsSwGateway = new IpfsSwGateway()
 
 const Home = ({ cid }: { cid: string }) => {
   const ipfsUrl = `ipfs://${cid}` as const
