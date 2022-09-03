@@ -3,10 +3,7 @@ import Head from 'next/head'
 import Image from 'next/image'
 
 import styles from '../styles/Home.module.css'
-
-if (typeof window === 'object' && 'serviceWorker' in navigator) {
-  navigator.serviceWorker.register('/ipfs-gateway-sw.js', { scope: '/' })
-}
+import { ipfsGateway } from '../ipfs-gateway'
 
 const Home: NextPage = () => {
   return (
@@ -19,7 +16,9 @@ const Home: NextPage = () => {
 
       <main className={styles.main}>
         <Image
-          src="/ipfs/bafkreiab33ip5asyevt6pr3cx56nd4373zaeme6qbqt6f5p2q53hfl6smi"
+          src={ipfsGateway.getLocalGatewayUrl(
+            'ipfs://bafkreiab33ip5asyevt6pr3cx56nd4373zaeme6qbqt6f5p2q53hfl6smi',
+          )}
           width={500}
           height={500}
           objectFit="contain"
@@ -28,7 +27,9 @@ const Home: NextPage = () => {
 
         {/* eslint-disable-next-line @next/next/no-img-element */}
         <img
-          src="/ipfs/bafkreiab33ip5asyevt6pr3cx56nd4373zaeme6qbqt6f5p2q53hfl6smi"
+          src={ipfsGateway.getLocalGatewayUrl(
+            'ipfs://bafkreiab33ip5asyevt6pr3cx56nd4373zaeme6qbqt6f5p2q53hfl6smi',
+          )}
           alt="With Service Worker Gateway"
         />
       </main>
