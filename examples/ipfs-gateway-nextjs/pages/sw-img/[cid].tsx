@@ -1,6 +1,5 @@
 import type { GetStaticProps } from 'next'
 import React from 'react'
-import { useIsomorphicLayoutEffect } from 'react-use'
 
 import {
   DEFAULT_IPFS_GATEWAYS,
@@ -8,22 +7,16 @@ import {
   parseIpfsInfo,
 } from '@crossbell/ipfs-fetch'
 
-import { ipfsGateway } from '../../ipfs-gateway'
+import { ipfsSwGateway } from '../../ipfs-gateway'
 import { ImgCard } from '../../components'
 
 const Home = ({ cid }: { cid: string }) => {
   const ipfsUrl = `ipfs://${cid}` as const
   const ipfsInfo = parseIpfsInfo(ipfsUrl)!
 
-  const [gatewayUrl, setGatewayUrl] = React.useState('')
-
-  useIsomorphicLayoutEffect(() => {
-    ipfsGateway.getFastestGatewayUrl(ipfsUrl).then(setGatewayUrl)
-  }, [])
-
   return (
     <div className="grid gap-4 grid-cols-2 m-4 md:grid-cols-3 lg:grid-cols-4">
-      <ImgCard cid={cid} src={gatewayUrl} key={gatewayUrl} />
+      <ImgCard cid={cid} src={ipfsSwGateway.getSwGatewayUrl(ipfsUrl)} />
 
       {DEFAULT_IPFS_GATEWAYS.map((gateway) => {
         const src = fillIpfsGatewayTemplate(gateway, ipfsInfo)
