@@ -3,6 +3,7 @@ import {
   DEFAULT_IPFS_GATEWAYS,
   parseIpfsInfo,
   fillIpfsGatewayTemplate,
+  ipfsFetch,
   Web2Url,
   IpfsUrl,
   IpfsGatewayTemplate,
@@ -11,7 +12,12 @@ import {
 import { registerServiceWorker, RegisterServiceWorkerConfig } from './register-sw'
 import { isBrowser, checkIfServiceWorkerRegistered } from './utils'
 
-const DEFAULT_CONFIG: RegisterServiceWorkerConfig = {
+export type IpfsGatewayConfig = RegisterServiceWorkerConfig & {
+  noServiceWorker: boolean
+}
+
+const DEFAULT_CONFIG: IpfsGatewayConfig = {
+  noServiceWorker: false,
   gatewayPrefix: DEFAULT_GATEWAY_PREFIX,
   gateways: DEFAULT_IPFS_GATEWAYS,
   serviceWorkerFilename: DEFAULT_SW_FILENAME,
@@ -19,19 +25,17 @@ const DEFAULT_CONFIG: RegisterServiceWorkerConfig = {
 
 export class IpfsGateway {
   private readonly fallbackGateway: IpfsGatewayTemplate
-  private readonly config: RegisterServiceWorkerConfig
+  private readonly config: IpfsGatewayConfig
 
-  readonly registration: Promise<void>
+  readonly registration: Promise<boolean>
 
-  constructor(config: Partial<RegisterServiceWorkerConfig> = {}) {
-    this.config = { ...config, ...DEFAULT_CONFIG }
+  constructor(config: Partial<IpfsGatewayConfig> = {}) {
+    this.config = { ...DEFAULT_CONFIG, ...config }
     this.fallbackGateway = this.config.gateways[0] ?? DEFAULT_IPFS_GATEWAYS[0]
-
-    if (isBrowser) {
-      this.registration = registerServiceWorker(this.config)
-    } else {
-      this.registration = new Promise(() => {})
-    }
+    this.registration =
+      isBrowser && !this.config.noServiceWorker
+        ? registerServiceWorker(this.config)
+        : Promise.resolve(false)
   }
 
   getLocalGatewayUrl = (ipfsUrl: IpfsUrl): Web2Url => {
@@ -60,5 +64,11 @@ export class IpfsGateway {
     } else {
       return this.getFallbackGatewayUrl(ipfsUrl)
     }
+  }
+
+  getFastestGatewayUrl = async (ipfsUrl: IpfsUrl): Promise<Web2Url> => {
+    const res = await ipfsFetch(ipfsUrl, { method: 'head', redirect: 'error' })
+
+    return res.url as Web2Url
   }
 }

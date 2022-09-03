@@ -15,7 +15,7 @@ export function registerServiceWorker({
   serviceWorkerFilename,
   ...config
 }: RegisterServiceWorkerConfig) {
-  return new Promise<void>((resolve) => {
+  return new Promise<boolean>((resolve) => {
     if ('serviceWorker' in navigator) {
       navigator.serviceWorker
         .register(`/${serviceWorkerFilename}?${qs.stringify(config)}`, {
@@ -29,11 +29,13 @@ export function registerServiceWorker({
       const onMessage = (event: MessageEvent) => {
         if (event.data === IPFS_GATEWAY_SW_IS_UP) {
           navigator.serviceWorker.removeEventListener('message', onMessage)
-          resolve()
+          resolve(true)
         }
       }
 
       navigator.serviceWorker.addEventListener('message', onMessage)
+    } else {
+      resolve(false)
     }
   })
 }
