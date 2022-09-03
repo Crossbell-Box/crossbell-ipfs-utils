@@ -9,7 +9,6 @@ export function parseIpfsInfo(ipfsUrl: IpfsUrl): IpfsInfo | null {
     /^(\w+):\/\/([^/]+)(.*)/.exec(ipfsUrl) ?? []
 
   if (protocol.toLowerCase() !== 'ipfs' || !cid) {
-    console.error(`Invalid IPFS URL: ${ipfsUrl}`)
     return null
   }
 
