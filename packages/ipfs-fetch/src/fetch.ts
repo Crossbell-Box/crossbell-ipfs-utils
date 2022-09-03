@@ -9,6 +9,7 @@ export type IpfsToFastestWeb2UrlConfig = RequestInit & {
 
 export enum IpfsFetchError {
   timeout = 'ipfsFetch timeout',
+  abort = 'ipfsFetch abort',
 }
 
 const NEVER = new Promise<never>(() => {})
@@ -31,12 +32,15 @@ export function ipfsFetch(
       abortControllerSet.clear()
     }
 
-    signal?.addEventListener('abort', cancelRequests)
-
     const timeoutId = setTimeout(() => {
-      cancelRequests()
       reject(new Error(IpfsFetchError.timeout))
+      cleanup()
     }, timeout)
+
+    signal?.addEventListener('abort', () => {
+      reject(new Error(IpfsFetchError.abort))
+      cleanup()
+    })
 
     Promise.race(
       web2InfoList.map((info) => {
@@ -44,27 +48,29 @@ export function ipfsFetch(
 
         abortControllerSet.add(abortController)
 
-        return fetch(info.url, { ...fetchConfig, signal: abortController.signal })
-          .then((response) => {
-            // Only resolve successful requests
-            if (response.status === 200) {
-              // Remove current abortController to avoid unexpected abort behavior
-              abortControllerSet.delete(abortController)
-              return response
-            } else {
-              return NEVER
-            }
-          })
-          .catch((err) => {
-            // Ignore network errors
-            return err.name == 'AbortError' ? Promise.reject(err) : NEVER
-          })
+        return (
+          fetch(info.url, { ...fetchConfig, signal: abortController.signal })
+            .then((response) => {
+              // Only resolve successful requests
+              if (response.status === 200) {
+                // Remove current abortController to avoid unexpected abort behavior
+                abortControllerSet.delete(abortController)
+                return response
+              } else {
+                return NEVER
+              }
+            })
+            // Ignore fetch errors
+            .catch(() => NEVER)
+        )
       }),
     )
       .then(resolve)
-      .finally(() => {
-        clearTimeout(timeoutId)
-        cancelRequests()
-      })
+      .finally(cleanup)
+
+    function cleanup() {
+      cancelRequests()
+      clearTimeout(timeoutId)
+    }
   })
 }
