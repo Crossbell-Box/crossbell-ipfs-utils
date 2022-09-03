@@ -20,5 +20,10 @@
     "build:cjs": "tsc -p tsconfig.json -m CommonJS --outDir dist/cjs",
     "build:esm": "tsc -p tsconfig.json -m ESNext --outDir dist/esm",
     "clean": "rm -rf ./dist"
+  },
+  "dependencies": {
+    "@crossbell/ipfs-gateway-sw": "workspace:*",
+    "@crossbell/ipfs-fetch": "workspace:*",
+    "query-string": "^7.1.1"
   }
 }
