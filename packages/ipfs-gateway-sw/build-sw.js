@@ -9,8 +9,8 @@ program.parse()
 const options = program.opts()
 
 require('esbuild').build({
-  entryPoints: ['src/index.ts'],
-  outfile: 'dist/index.js',
+  entryPoints: ['src/sw.ts'],
+  outfile: 'dist/sw.js',
   format: 'iife',
   bundle: true,
   logLevel: 'info',

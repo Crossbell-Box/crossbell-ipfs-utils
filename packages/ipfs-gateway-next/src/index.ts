@@ -28,7 +28,7 @@ export function withIpfsGateway({
         new CopyPlugin({
           patterns: [
             {
-              from: require.resolve('@crossbell/ipfs-gateway-sw/dist/index.js'),
+              from: require.resolve('@crossbell/ipfs-gateway-sw/dist/sw.js'),
               to: swFilePath,
             },
           ],
