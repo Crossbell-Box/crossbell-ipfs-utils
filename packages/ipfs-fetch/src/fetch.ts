@@ -2,7 +2,7 @@ import type { IpfsUrl, IpfsGatewayTemplate } from './types'
 import { DEFAULT_IPFS_GATEWAYS } from './constant'
 import { ipfsToWeb2InfoList } from './utils'
 
-export type IpfsToFastestWeb2UrlConfig = {
+export type IpfsToFastestWeb2UrlConfig = RequestInit & {
   gateways?: IpfsGatewayTemplate[]
   timeout?: number
 }
@@ -15,7 +15,12 @@ const NEVER = new Promise<never>(() => {})
 
 export function ipfsFetch(
   ipfsUrl: IpfsUrl,
-  { gateways = DEFAULT_IPFS_GATEWAYS, timeout = 6000 }: IpfsToFastestWeb2UrlConfig = {},
+  {
+    gateways = DEFAULT_IPFS_GATEWAYS,
+    timeout = 6000,
+    signal,
+    ...fetchConfig
+  }: IpfsToFastestWeb2UrlConfig = {},
 ): Promise<Response> {
   return new Promise((resolve, reject) => {
     const web2InfoList = ipfsToWeb2InfoList(ipfsUrl, gateways)
@@ -26,6 +31,8 @@ export function ipfsFetch(
       abortControllerSet.clear()
     }
 
+    signal?.addEventListener('abort', cancelRequests)
+
     const timeoutId = setTimeout(() => {
       cancelRequests()
       reject(new Error(IpfsFetchError.timeout))
@@ -34,23 +41,24 @@ export function ipfsFetch(
     Promise.race(
       web2InfoList.map((info) => {
         const abortController = new AbortController()
+
         abortControllerSet.add(abortController)
 
-        return (
-          fetch(info.url, { signal: abortController.signal })
-            .then((res) => {
-              // Only resolve successful requests
-              if (res.status === 200) {
-                // Remove current abortController to avoid unexpected abort behavior
-                abortControllerSet.delete(abortController)
-                return res
-              } else {
-                return NEVER
-              }
-            })
-            // Ignore fetch errors
-            .catch(() => NEVER)
-        )
+        return fetch(info.url, { ...fetchConfig, signal: abortController.signal })
+          .then((response) => {
+            // Only resolve successful requests
+            if (response.status === 200) {
+              // Remove current abortController to avoid unexpected abort behavior
+              abortControllerSet.delete(abortController)
+              return response
+            } else {
+              return NEVER
+            }
+          })
+          .catch((err) => {
+            // Ignore network errors
+            return err.name == 'AbortError' ? Promise.reject(err) : NEVER
+          })
       }),
     )
       .then(resolve)
