@@ -5,5 +5,5 @@ export const DEFAULT_IPFS_GATEWAYS: IpfsGatewayTemplate[] = [
   'https://dweb.link/ipfs/{cid}{pathToResource}',
   'https://cloudflare-ipfs.com/ipfs/{cid}{pathToResource}',
   'https://cf-ipfs.com/ipfs/{cid}{pathToResource}',
-  'https://4everland.io/ipfs/{cid}{pathToResource}',
+  'https://4everland.xyz/ipfs/{cid}{pathToResource}',
 ]
