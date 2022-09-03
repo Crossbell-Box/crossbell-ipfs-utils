@@ -9,18 +9,23 @@
     "start": "next start"
   },
   "dependencies": {
+    "@crossbell/ipfs-fetch": "workspace:*",
     "@crossbell/ipfs-gateway": "workspace:*",
     "next": "12.2.5",
     "react": "18.2.0",
-    "react-dom": "18.2.0"
+    "react-dom": "18.2.0",
+    "react-use": "^17.4.0"
   },
   "devDependencies": {
     "@crossbell/ipfs-gateway-next": "workspace:*",
     "@types/node": "^18.7.14",
     "@types/react": "18.0.18",
     "@types/react-dom": "18.0.6",
+    "autoprefixer": "^10.4.8",
     "eslint": "8.22.0",
     "eslint-config-next": "12.2.5",
+    "postcss": "^8.4.16",
+    "tailwindcss": "^3.1.8",
     "typescript": "^4.8.2",
     "webpack": "^5.74.0"
   }
