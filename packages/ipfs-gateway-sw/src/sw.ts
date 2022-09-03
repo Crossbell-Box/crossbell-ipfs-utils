@@ -41,7 +41,14 @@ typedSelf.addEventListener('fetch', (event) => {
         gateways: gateways.length > 0 ? gateways : undefined,
         // Gateway `cloudflare-ipfs.com` has redirection issues with some network.
         redirect: 'error',
-      }),
+        method: 'head',
+      }).then(
+        (res) =>
+          new Response(null, {
+            status: 307,
+            headers: { location: res.url },
+          }),
+      ),
     )
   }
 })
