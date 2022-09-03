@@ -21,12 +21,16 @@ export class IpfsGateway {
   private readonly fallbackGateway: IpfsGatewayTemplate
   private readonly config: RegisterServiceWorkerConfig
 
+  readonly registration: Promise<void>
+
   constructor(config: Partial<RegisterServiceWorkerConfig> = {}) {
     this.config = { ...config, ...DEFAULT_CONFIG }
     this.fallbackGateway = this.config.gateways[0] ?? DEFAULT_IPFS_GATEWAYS[0]
 
     if (isBrowser) {
-      registerServiceWorker(this.config)
+      this.registration = registerServiceWorker(this.config)
+    } else {
+      this.registration = new Promise(() => {})
     }
   }
 
@@ -40,11 +44,7 @@ export class IpfsGateway {
     return fillIpfsGatewayTemplate(`${this.config.gatewayPrefix}{cid}{pathToResource}`, ipfsInfo)
   }
 
-  getGatewayUrl = (ipfsUrl: IpfsUrl): Web2Url => {
-    if (checkIfServiceWorkerRegistered()) {
-      return this.getLocalGatewayUrl(ipfsUrl)
-    }
-
+  getFallbackGatewayUrl = (ipfsUrl: IpfsUrl): Web2Url => {
     const ipfsInfo = parseIpfsInfo(ipfsUrl)
 
     if (!ipfsInfo) {
@@ -52,5 +52,13 @@ export class IpfsGateway {
     }
 
     return fillIpfsGatewayTemplate(this.fallbackGateway, ipfsInfo)
+  }
+
+  getGatewayUrl = (ipfsUrl: IpfsUrl): Web2Url => {
+    if (checkIfServiceWorkerRegistered()) {
+      return this.getLocalGatewayUrl(ipfsUrl)
+    } else {
+      return this.getFallbackGatewayUrl(ipfsUrl)
+    }
   }
 }
