@@ -1,6 +1,11 @@
 import { ipfsFetch, IpfsGatewayTemplate } from '@crossbell/ipfs-fetch'
 
-import { DEFAULT_GATEWAY_PREFIX, GatewayPrefix } from './const'
+import {
+  CHECK_IPFS_GATEWAY_SW_STATUS,
+  IPFS_GATEWAY_SW_IS_UP,
+  DEFAULT_GATEWAY_PREFIX,
+  GatewayPrefix,
+} from './const'
 
 const typedSelf = self as unknown as ServiceWorkerGlobalScope
 
@@ -24,6 +29,7 @@ typedSelf.addEventListener('install', (event) => {
 
 typedSelf.addEventListener('activate', (event) => {
   event.waitUntil(typedSelf.clients.claim())
+  broadcastStatus()
 })
 
 typedSelf.addEventListener('fetch', (event) => {
@@ -39,3 +45,15 @@ typedSelf.addEventListener('fetch', (event) => {
     )
   }
 })
+
+typedSelf.addEventListener('message', (event) => {
+  if (event.data === CHECK_IPFS_GATEWAY_SW_STATUS) {
+    broadcastStatus()
+  }
+})
+
+function broadcastStatus() {
+  typedSelf.clients.matchAll().then((clients) => {
+    clients.forEach((client) => client.postMessage(IPFS_GATEWAY_SW_IS_UP))
+  })
+}
