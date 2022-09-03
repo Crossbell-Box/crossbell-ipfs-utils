@@ -83,6 +83,7 @@ describe('ipfs-fetch.utils', () => {
       const gateways: IpfsGatewayTemplate[] = [
         'https://ipfs.io/ipfs/{cid}{pathToResource}',
         'https://ipfs.io/ipfs/{cid}/{pathToResource}',
+        '/{cid}/{pathToResource}',
       ]
 
       expect(
@@ -97,6 +98,9 @@ describe('ipfs-fetch.utils', () => {
           "https://ipfs.io/ipfs/bafybeiemxf5abjwjbikoz4mc3a3dla6ual3jsgpdr4cjr3oz3evfyavhwq",
           "https://ipfs.io/ipfs/bafybeiemxf5abjwjbikoz4mc3a3dla6ual3jsgpdr4cjr3oz3evfyavhwq/wiki",
           "https://ipfs.io/ipfs/bafybeiemxf5abjwjbikoz4mc3a3dla6ual3jsgpdr4cjr3oz3evfyavhwq/wiki",
+          "/bafybeiemxf5abjwjbikoz4mc3a3dla6ual3jsgpdr4cjr3oz3evfyavhwq",
+          "/bafybeiemxf5abjwjbikoz4mc3a3dla6ual3jsgpdr4cjr3oz3evfyavhwq/wiki",
+          "/bafybeiemxf5abjwjbikoz4mc3a3dla6ual3jsgpdr4cjr3oz3evfyavhwq/wiki",
         ]
       `)
     })

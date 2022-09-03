@@ -1,4 +1,4 @@
-export type Web2Url = `${'https' | 'http'}://${string}`
+export type Web2Url = `${'https://' | 'http://' | '/'}${string}`
 
 export type IpfsUrl = `ipfs://${string}`
 
