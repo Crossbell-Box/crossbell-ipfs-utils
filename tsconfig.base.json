@@ -5,12 +5,11 @@
     "strict": true,
     "noUnusedParameters": true,
     "noUnusedLocals": true,
-    "noEmitHelpers": true,
     "noImplicitAny": true,
     "noImplicitReturns": true,
     "esModuleInterop": true,
     "moduleResolution": "node",
     "skipLibCheck": true,
-    "target": "ESNext",
+    "target": "ESNext"
   }
 }
