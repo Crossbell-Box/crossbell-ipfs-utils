@@ -12,7 +12,7 @@ export type WithIpfsGatewayConfig = NextConfig & {
     gatewayPath: GatewayPath
     fallbackGateway: FallbackGateway
     serviceWorkerFilename: string
-    enableServerGateway: boolean
+    disableServerGateway: boolean
   }>
 }
 
@@ -28,7 +28,7 @@ export function withIpfsGateway({
   const gatewayPath: GatewayPath = ipfsGateway?.gatewayPath ?? '/ipfs/:cid/:pathToResource*'
   const fallbackGateway: FallbackGateway = ipfsGateway?.fallbackGateway ?? defaultFallbackGateway
   const serviceWorkerFilename = ipfsGateway?.serviceWorkerFilename ?? 'ipfs-gateway-sw.js'
-  const enableServerGateway = ipfsGateway?.enableServerGateway ?? false
+  const disableServerGateway = ipfsGateway?.disableServerGateway ?? false
   const swFilePath = `static/${serviceWorkerFilename}`
 
   return {
@@ -65,7 +65,9 @@ export function withIpfsGateway({
     async redirects(...params) {
       const userRedirects = (await userConfig.redirects?.(...params)) ?? []
 
-      if (enableServerGateway) {
+      if (disableServerGateway) {
+        return userRedirects
+      } else {
         const redirect: Redirect = {
           permanent: false,
           // TODO: - Validate `gatewayPath` pattern
@@ -75,8 +77,6 @@ export function withIpfsGateway({
         }
 
         return [...userRedirects, redirect]
-      } else {
-        return userRedirects
       }
     },
   }
