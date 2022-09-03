@@ -29,10 +29,12 @@ typedSelf.addEventListener('activate', (event) => {
 typedSelf.addEventListener('fetch', (event) => {
   const url = new URL(event.request.url)
 
-  if (url.pathname.startsWith(gatewayPrefix)) {
+  if (url.origin === typedSelf.location.origin && url.pathname.startsWith(gatewayPrefix)) {
     event.respondWith(
       ipfsFetch(`ipfs://${url.pathname.substring(gatewayPrefix.length)}`, {
         gateways: gateways.length > 0 ? gateways : undefined,
+        // Gateway `cloudflare-ipfs.com` has redirection issues with some network.
+        redirect: 'error',
       }),
     )
   }
