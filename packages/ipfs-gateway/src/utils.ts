@@ -2,13 +2,13 @@ const IS_SERVICE_WORKER_REGISTERED_KEY = 'IS_SERVICE_WORKER_REGISTERED_KEY'
 
 export const isBrowser = typeof window === 'object'
 
-export function markServiceWorkerAsRegistered() {
-  localStorage.setItem(IS_SERVICE_WORKER_REGISTERED_KEY, 'true')
+export function markServiceWorkerAsRegistered(filename: string) {
+  localStorage.setItem(`${IS_SERVICE_WORKER_REGISTERED_KEY}_${filename}`, 'true')
 }
 
-export function checkIfServiceWorkerRegistered() {
+export function checkIfServiceWorkerRegisteredBefore(filename: string) {
   if (isBrowser) {
-    return localStorage.getItem(IS_SERVICE_WORKER_REGISTERED_KEY) === 'true'
+    return localStorage.getItem(`${IS_SERVICE_WORKER_REGISTERED_KEY}_${filename}`) === 'true'
   } else {
     return false
   }
