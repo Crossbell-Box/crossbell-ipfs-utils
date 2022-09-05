@@ -16,10 +16,9 @@
     "clean": {
       "outputs": []
     },
-    "deploy": {
+    "release-build": {
       "dependsOn": ["clean", "build", "test", "lint"],
-      "outputs": [],
-      "cache": false
+      "outputs": []
     }
   }
 }
