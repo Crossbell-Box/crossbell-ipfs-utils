@@ -17,7 +17,7 @@ const Home = ({ cid }: { cid: string }) => {
 
   return (
     <div className="grid gap-4 grid-cols-2 m-4 md:grid-cols-3 lg:grid-cols-4">
-      <ImgCard cid={cid} src={gatewayUrl} key={gatewayUrl} />
+      <ImgCard cid={cid} src={gatewayUrl} />
 
       {DEFAULT_IPFS_GATEWAYS.map((gateway) => {
         const src = fillIpfsGatewayTemplate(gateway, ipfsInfo)

@@ -6,4 +6,7 @@ const nextConfig = {
   swcMinify: true,
 }
 
-module.exports = withIpfsGateway(nextConfig)
+module.exports = withIpfsGateway({
+  ...nextConfig,
+  ipfsGateway: { disableServerGateway: true },
+})

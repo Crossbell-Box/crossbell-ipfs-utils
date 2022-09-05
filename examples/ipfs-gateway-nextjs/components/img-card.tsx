@@ -8,8 +8,7 @@ export type ResourceCardProps = {
 }
 
 export function ImgCard({ cid, src, alt }: ResourceCardProps) {
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  const startTime = React.useMemo(() => Date.now(), [src])
+  const startTime = React.useMemo(() => Date.now(), [])
   const trimmedCID = React.useMemo(() => cid.replace(/^(\w{2})\w+(\w{2})$/, '$1...$2'), [cid])
 
   const [duration, setDuration] = React.useState(0)
