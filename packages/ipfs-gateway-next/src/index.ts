@@ -32,6 +32,8 @@ export function withIpfsGateway({
   const swFilePath = `static/${serviceWorkerFilename}`
 
   return {
+    ...userConfig,
+
     webpack: (config, context) => {
       config.plugins.push(
         new CopyPlugin({
