@@ -6,7 +6,7 @@ import {
   DEFAULT_IPFS_GATEWAYS,
   fillIpfsGatewayTemplate,
   parseIpfsInfo,
-} from '@crossbell/ipfs-fetch'
+} from '@crossbell/ipfs-gateway'
 
 import { ImgCard } from '../../components'
 

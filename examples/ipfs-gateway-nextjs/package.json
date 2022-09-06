@@ -9,7 +9,6 @@
     "start": "next start"
   },
   "dependencies": {
-    "@crossbell/ipfs-fetch": "workspace:*",
     "@crossbell/ipfs-gateway": "workspace:*",
     "@crossbell/ipfs-react": "workspace:*",
     "next": "12.2.5",
