@@ -4,10 +4,10 @@ import { useEffect, useState, useRef } from 'react'
 
 import { useIpfsGateway } from './use-ipfs-gateway'
 
-export function useWeb2Url(ipfsUrl: IpfsUrl): Web2Url | null
-export function useWeb2Url(ipfsUrl: IpfsUrl, getDefaultUrl: () => Web2Url): Web2Url
-export function useWeb2Url(ipfsUrl: IpfsUrl, getDefaultUrl: () => Web2Url | null): Web2Url | null
-export function useWeb2Url(ipfsUrl: IpfsUrl, getDefaultUrl?: () => Web2Url | null): Web2Url | null {
+export function useWeb2Url(ipfsUrl: IpfsUrl): Web2Url
+export function useWeb2Url(ipfsUrl: string, getDefaultUrl: () => Web2Url): Web2Url
+export function useWeb2Url(ipfsUrl: string, getDefaultUrl?: () => Web2Url | null): Web2Url | null
+export function useWeb2Url(ipfsUrl: string, getDefaultUrl?: () => Web2Url | null): Web2Url | null {
   const ipfsGateway = useIpfsGateway()
 
   const web2Url = usePromiseUrl(ipfsGateway, ipfsUrl)
@@ -15,7 +15,7 @@ export function useWeb2Url(ipfsUrl: IpfsUrl, getDefaultUrl?: () => Web2Url | nul
   return web2Url ?? getDefaultUrl?.() ?? ipfsGateway.getFallbackWeb2Url(ipfsUrl)
 }
 
-function usePromiseUrl(ipfsGateway: IpfsGateway, ipfsUrl: IpfsUrl): Web2Url | null {
+function usePromiseUrl(ipfsGateway: IpfsGateway, ipfsUrl: string): Web2Url | null {
   const [url, setUrl] = useState<Web2Url | null>(null)
   const ipfsUrlRef = useRef(ipfsUrl)
 
