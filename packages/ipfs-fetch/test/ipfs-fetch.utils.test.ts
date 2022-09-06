@@ -1,7 +1,7 @@
 import { expect, describe, it, test } from 'vitest'
 
 import type { IpfsUrl, IpfsInfo, IpfsGatewayTemplate } from '../src'
-import { parseIpfsInfo, ipfsToWeb2InfoList, fillIpfsGatewayTemplate } from '../src/utils'
+import { parseIpfsInfo, ipfsToWeb2InfoList, fillIpfsGatewayTemplate, isIpfsUrl } from '../src/utils'
 
 describe('ipfs-fetch.utils', () => {
   describe.concurrent('parseIpfsInfo', () => {
@@ -125,6 +125,37 @@ describe('ipfs-fetch.utils', () => {
           "https://bafybeiemxf5abjwjbikoz4mc3a3dla6ual3jsgpdr4cjr3oz3evfyavhwq.ipfs.dweb.link/wiki",
         ]
       `)
+    })
+  })
+
+  describe.concurrent('isIpfsUrl', () => {
+    test('valid ipfs urls', () => {
+      const urls = [
+        'ipfs://bafybeiemxf5abjwjbikoz4mc3a3dla6ual3jsgpdr4cjr3oz3evfyavhwq',
+        'ipfs://bafybeiemxf5abjwjbikoz4mc3a3dla6ual3jsgpdr4cjr3oz3evfyavhwq/wiki',
+        'ipfs://bafybeiemxf5abjwjbikoz4mc3a3dla6ual3jsgpdr4cjr3oz3evfyavhwq/wiki/img.png',
+      ]
+
+      urls.forEach((url) => {
+        expect(isIpfsUrl(url)).toBeTruthy()
+      })
+    })
+
+    test('invalid ipfs url', () => {
+      const urls = [
+        'ipfs://',
+        'https://google.com',
+        'https://google.com/ipfs',
+        'https://google.com/ipfs/img.png',
+        '',
+        '/ipfs/',
+        'ipfs/',
+        'ipfs',
+      ]
+
+      urls.forEach((url) => {
+        expect(isIpfsUrl(url)).toBeFalsy()
+      })
     })
   })
 })

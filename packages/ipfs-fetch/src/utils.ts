@@ -4,11 +4,12 @@ import { DEFAULT_IPFS_GATEWAYS } from './constant'
 
 export type Web2Info = { url: Web2Url; gateway: IpfsGatewayTemplate }
 
-export function parseIpfsInfo(ipfsUrl: IpfsUrl): IpfsInfo | null {
-  const [, protocol = '', cid = '', pathToResource = ''] =
-    /^(\w+):\/\/([^/]+)(.*)/.exec(ipfsUrl) ?? []
+const ipfsUrlRegex = /^ipfs:\/\/([^/]+)(.*)$/
 
-  if (protocol.toLowerCase() !== 'ipfs' || !cid) {
+export function parseIpfsInfo(ipfsUrl: IpfsUrl): IpfsInfo | null {
+  const [, cid = '', pathToResource = ''] = ipfsUrlRegex.exec(ipfsUrl) ?? []
+
+  if (!cid) {
     return null
   }
 
@@ -46,4 +47,8 @@ export function ipfsToWeb2InfoList(
     gateway,
     url: fillIpfsGatewayTemplate(gateway, ipfsInfo),
   }))
+}
+
+export function isIpfsUrl(url: string): url is IpfsUrl {
+  return ipfsUrlRegex.test(url)
 }
