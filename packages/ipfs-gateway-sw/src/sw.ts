@@ -42,13 +42,15 @@ typedSelf.addEventListener('fetch', (event) => {
         // Gateway `cloudflare-ipfs.com` has redirection issues with some network.
         redirect: 'error',
         method: 'head',
-      }).then(
-        (res) =>
-          new Response(null, {
-            status: 307,
-            headers: { location: res.url },
-          }),
-      ),
+      }).then((res) => {
+        return new Response(null, {
+          status: 307,
+          headers: {
+            location: res.url,
+            'cache-control': 'public, max-age=604800, immutable',
+          },
+        })
+      }),
     )
   }
 })
