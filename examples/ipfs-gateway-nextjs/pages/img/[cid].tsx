@@ -12,8 +12,8 @@ import { ImgCard } from '../../components'
 
 const Home = ({ cid }: { cid: string }) => {
   const ipfsUrl = `ipfs://${cid}` as const
-  const ipfsInfo = parseIpfsInfo(ipfsUrl)!
-  const gatewayUrl = useWeb2Url(ipfsUrl)!
+  const ipfsInfo = parseIpfsInfo(ipfsUrl)
+  const gatewayUrl = useWeb2Url(ipfsUrl)
 
   return (
     <div className="grid gap-4 grid-cols-2 m-4 md:grid-cols-3 lg:grid-cols-4">
