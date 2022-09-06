@@ -22,12 +22,12 @@
     "clean": "rm -rf ./dist"
   },
   "dependencies": {
+    "@crossbell/ipfs-gateway-sw": "workspace:*",
+    "@crossbell/ipfs-fetch": "workspace:*",
     "copy-webpack-plugin": "^11.0.0",
     "webpack": "^5.74.0"
   },
   "peerDependencies": {
-    "@crossbell/ipfs-gateway-sw": "workspace:*",
-    "@crossbell/ipfs-fetch": "workspace:*",
     "next": "^12"
   },
   "devDependencies": {
