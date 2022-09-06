@@ -97,6 +97,7 @@ export class IpfsGateway {
 
     try {
       const res = await ipfsFetch(ipfsUrl, {
+        method: 'head',
         redirect: 'error',
         gateways: this.config.gateways,
       })
