@@ -12,7 +12,7 @@ export type RegisterServiceWorkerConfig = {
 export function registerServiceWorker({
   serviceWorkerFilename,
   ...config
-}: RegisterServiceWorkerConfig) {
+}: RegisterServiceWorkerConfig): Promise<boolean> {
   navigator.serviceWorker.register(`/${serviceWorkerFilename}?${qs.stringify(config)}`, {
     scope: '/',
   })
@@ -21,7 +21,17 @@ export function registerServiceWorker({
     return registration.active?.postMessage(CHECK_IPFS_GATEWAY_SW_STATUS)
   })
 
-  return waitUntilServiceWorkerUp()
+  return Promise.all([
+    waitUntilServiceWorkerUp(),
+    navigator.serviceWorker.register(`/${serviceWorkerFilename}?${qs.stringify(config)}`, {
+      scope: '/',
+    }),
+  ])
+    .then(() => true)
+    .catch((error) => {
+      console.error(error)
+      return false
+    })
 }
 
 function waitUntilServiceWorkerUp() {

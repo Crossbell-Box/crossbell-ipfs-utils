@@ -14,6 +14,7 @@ import {
   isBrowser,
   markServiceWorkerAsRegistered,
   checkIfServiceWorkerRegisteredBefore,
+  markServiceWorkerAsUnregistered,
 } from './utils'
 
 export type IpfsGatewayConfig = {
@@ -57,10 +58,16 @@ export class IpfsGateway {
             ? 'pending-response'
             : 'first-time-install',
 
-          registration: registerServiceWorker(registerConfig).then(() => {
-            this._swStatus = 'ready'
-            markServiceWorkerAsRegistered(swConfig.serviceWorkerFilename)
-            return true
+          registration: registerServiceWorker(registerConfig).then((isReady) => {
+            if (isReady) {
+              this._swStatus = 'ready'
+              markServiceWorkerAsRegistered(swConfig.serviceWorkerFilename)
+              return true
+            } else {
+              this._swStatus = 'disabled'
+              markServiceWorkerAsUnregistered(swConfig.serviceWorkerFilename)
+              return false
+            }
           }),
         }
       } else {
