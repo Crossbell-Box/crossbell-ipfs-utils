@@ -7,6 +7,7 @@ import {
   IpfsUrl,
   IpfsGatewayTemplate,
   ipfsFetch,
+  isIpfsUrl,
 } from '@crossbell/ipfs-fetch'
 
 import { registerServiceWorker, RegisterServiceWorkerConfig } from './sw-register'
@@ -82,14 +83,18 @@ export class IpfsGateway {
     this.registration = swInfo.registration
   }
 
-  getWeb2Url = async (ipfsUrl: IpfsUrl): Promise<Web2Url | null> => {
+  async getWeb2Url(ipfsUrl: IpfsUrl): Promise<Web2Url>
+  async getWeb2Url(ipfsUrl: string): Promise<Web2Url | null>
+  async getWeb2Url(ipfsUrl: string): Promise<Web2Url | null> {
     const isSwReady = this.config.serviceWorker ? await this.registration : false
     const swWeb2Url = isSwReady ? this.getSwWeb2Url(ipfsUrl) : null
 
     return swWeb2Url ?? (await this.getFastestWeb2Url(ipfsUrl)) ?? this.getFallbackWeb2Url(ipfsUrl)
   }
 
-  getFastestWeb2Url = async (ipfsUrl: IpfsUrl): Promise<Web2Url | null> => {
+  async getFastestWeb2Url(ipfsUrl: string): Promise<Web2Url | null> {
+    if (!isIpfsUrl(ipfsUrl)) return null
+
     try {
       const res = await ipfsFetch(ipfsUrl, {
         method: 'head',
@@ -104,16 +109,18 @@ export class IpfsGateway {
     }
   }
 
-  getSwWeb2Url = (ipfsUrl: IpfsUrl): Web2Url | null => {
-    const gatewayPrefix = this.config.serviceWorker?.gatewayPrefix
+  getSwWeb2Url(ipfsUrl: IpfsUrl): Web2Url
+  getSwWeb2Url(ipfsUrl: string): Web2Url | null
+  getSwWeb2Url(ipfsUrl: string): Web2Url | null {
+    const gatewayPrefix = this.config.serviceWorker?.gatewayPrefix ?? DEFAULT_GATEWAY_PREFIX
     const ipfsInfo = parseIpfsInfo(ipfsUrl)
 
-    if (!gatewayPrefix || !ipfsInfo) return null
-
-    return fillIpfsGatewayTemplate(`${gatewayPrefix}{cid}{pathToResource}`, ipfsInfo)
+    return ipfsInfo && fillIpfsGatewayTemplate(`${gatewayPrefix}{cid}{pathToResource}`, ipfsInfo)
   }
 
-  getFallbackWeb2Url = (ipfsUrl: IpfsUrl): Web2Url | null => {
+  getFallbackWeb2Url(ipfsUrl: IpfsUrl): Web2Url
+  getFallbackWeb2Url(ipfsUrl: string): Web2Url | null
+  getFallbackWeb2Url(ipfsUrl: string): Web2Url | null {
     const ipfsInfo = parseIpfsInfo(ipfsUrl)
 
     return ipfsInfo && fillIpfsGatewayTemplate(this.fallbackGateway, ipfsInfo)
