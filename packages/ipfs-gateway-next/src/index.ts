@@ -16,7 +16,7 @@ export type WithIpfsGatewayConfig = NextConfig & {
   }>
 }
 
-const defaultFallbackGateway = fillIpfsGatewayTemplate(DEFAULT_IPFS_GATEWAYS[1], {
+const defaultFallbackGateway = fillIpfsGatewayTemplate(DEFAULT_IPFS_GATEWAYS[0], {
   cid: ':cid',
   pathToResource: ':pathToResource*',
 }) as FallbackGateway
