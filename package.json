@@ -11,6 +11,7 @@
   "scripts": {
     "build": "turbo run build",
     "build:pkgs": "turbo run build --filter=@crossbell/*",
+    "build:release": "turbo run build:release --force",
     "bump-version": "bumpp package.json packages/*/package.json examples/*/package.json",
     "clean": "turbo run clean",
     "format": "run-p format:code format:package",
@@ -18,8 +19,7 @@
     "format:package": "format-package 'package.json' -w -c format-package.json",
     "lint": "eslint . --ext .ts,.tsx --fix --max-warnings 0",
     "prepare": "husky install",
-    "release": "run-s release-build bump-version && pnpm -r publish --access public",
-    "release-build": "turbo run release-build --force",
+    "release": "run-s build:release bump-version && pnpm -r publish --access public",
     "test": "turbo run test"
   },
   "devDependencies": {
