@@ -7,7 +7,7 @@ import { parseIpfsInfo, fillIpfsGatewayTemplate } from '../../src/utils'
 export const IPFS_URL: IpfsUrl =
   'ipfs://bafkreiarfgti3xpv2oznl7rzanfbzm7gvklvcwn5poqb53wlhi3n4cwp2a'
 
-export const IPFS_INFO = parseIpfsInfo(IPFS_URL)!
+export const IPFS_INFO = parseIpfsInfo(IPFS_URL)
 
 export const [
   SUCCESS_A_IPFS_GATEWAY,

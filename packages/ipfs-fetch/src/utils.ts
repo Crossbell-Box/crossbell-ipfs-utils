@@ -6,7 +6,9 @@ export type Web2Info = { url: Web2Url; gateway: IpfsGatewayTemplate }
 
 const ipfsUrlRegex = /^ipfs:\/\/([^/]+)(.*)$/
 
-export function parseIpfsInfo(ipfsUrl: IpfsUrl): IpfsInfo | null {
+export function parseIpfsInfo(ipfsUrl: IpfsUrl): IpfsInfo
+export function parseIpfsInfo(ipfsUrl: string): IpfsInfo | null
+export function parseIpfsInfo(ipfsUrl: string): IpfsInfo | null {
   const [, cid = '', pathToResource = ''] = ipfsUrlRegex.exec(ipfsUrl) ?? []
 
   if (!cid) {
