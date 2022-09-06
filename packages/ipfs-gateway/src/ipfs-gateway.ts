@@ -18,20 +18,19 @@ import {
   markServiceWorkerAsUnregistered,
 } from './utils'
 
+export type IpfsGatewayServiceWorkerConfig = Omit<RegisterServiceWorkerConfig, 'gateways'>
+
 export type IpfsGatewayConfig = {
   gateways: IpfsGatewayTemplate[]
-  serviceWorker: Omit<RegisterServiceWorkerConfig, 'gateways'> | null
+  serviceWorker: IpfsGatewayServiceWorkerConfig | null
 }
+
+export type OptionalIpfsGatewayConfig = Partial<{
+  gateways: IpfsGatewayTemplate[]
+  serviceWorker: Partial<IpfsGatewayServiceWorkerConfig> | null
+}>
 
 export type IpfsGatewaySwStatus = 'disabled' | 'first-time-install' | 'pending-response' | 'ready'
-
-const DEFAULT_CONFIG: IpfsGatewayConfig = {
-  gateways: DEFAULT_IPFS_GATEWAYS,
-  serviceWorker: {
-    gatewayPrefix: DEFAULT_GATEWAY_PREFIX,
-    serviceWorkerFilename: DEFAULT_SW_FILENAME,
-  },
-}
 
 export class IpfsGateway {
   private readonly fallbackGateway: IpfsGatewayTemplate
@@ -45,8 +44,8 @@ export class IpfsGateway {
     return this._swStatus
   }
 
-  constructor(config: Partial<IpfsGatewayConfig> = {}) {
-    this.config = { ...DEFAULT_CONFIG, ...config }
+  constructor(config: OptionalIpfsGatewayConfig = {}) {
+    this.config = prepareConfig(config)
     this.fallbackGateway = this.config.gateways[0] ?? DEFAULT_IPFS_GATEWAYS[0]
 
     const swInfo = ((): { status: IpfsGatewaySwStatus; registration: Promise<boolean> } => {
@@ -124,5 +123,18 @@ export class IpfsGateway {
     const ipfsInfo = parseIpfsInfo(ipfsUrl)
 
     return ipfsInfo && fillIpfsGatewayTemplate(this.fallbackGateway, ipfsInfo)
+  }
+}
+
+function prepareConfig({ gateways, serviceWorker }: OptionalIpfsGatewayConfig): IpfsGatewayConfig {
+  return {
+    gateways: gateways ?? DEFAULT_IPFS_GATEWAYS,
+    serviceWorker:
+      serviceWorker === null
+        ? null
+        : {
+            serviceWorkerFilename: serviceWorker?.serviceWorkerFilename ?? DEFAULT_SW_FILENAME,
+            gatewayPrefix: serviceWorker?.gatewayPrefix ?? DEFAULT_GATEWAY_PREFIX,
+          },
   }
 }
