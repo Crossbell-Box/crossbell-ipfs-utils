@@ -10,6 +10,7 @@
   "keywords": [],
   "scripts": {
     "build": "turbo run build",
+    "build:pkgs": "turbo run build --filter=@crossbell/*",
     "bump-version": "bumpp package.json packages/*/package.json examples/*/package.json",
     "clean": "turbo run clean",
     "format": "run-p format:code format:package",
