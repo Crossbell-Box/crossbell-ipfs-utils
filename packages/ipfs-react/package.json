@@ -22,12 +22,10 @@
     "clean": "rm -rf ./dist"
   },
   "peerDependencies": {
-    "@crossbell/ipfs-fetch": "workspace:*",
     "@crossbell/ipfs-gateway": "workspace:*",
     "react": "^17 || ^18"
   },
   "devDependencies": {
-    "@crossbell/ipfs-fetch": "workspace:*",
     "@crossbell/ipfs-gateway": "workspace:*",
     "@types/react": "18.0.18",
     "node-fetch": "^3.2.10",

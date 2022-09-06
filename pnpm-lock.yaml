@@ -48,7 +48,6 @@ importers:
 
   examples/ipfs-gateway-nextjs:
     specifiers:
-      '@crossbell/ipfs-fetch': workspace:*
       '@crossbell/ipfs-gateway': workspace:*
       '@crossbell/ipfs-gateway-next': workspace:*
       '@crossbell/ipfs-react': workspace:*
@@ -67,7 +66,6 @@ importers:
       typescript: ^4.8.2
       webpack: ^5.74.0
     dependencies:
-      '@crossbell/ipfs-fetch': link:../../packages/ipfs-fetch
       '@crossbell/ipfs-gateway': link:../../packages/ipfs-gateway
       '@crossbell/ipfs-react': link:../../packages/ipfs-react
       next: 12.2.5_biqbaboplfbrettd7655fr4n2y
@@ -115,11 +113,11 @@ importers:
       react-dom: ^18.2.0
       webpack: ^5.74.0
     dependencies:
+      '@crossbell/ipfs-fetch': link:../ipfs-fetch
+      '@crossbell/ipfs-gateway-sw': link:../ipfs-gateway-sw
       copy-webpack-plugin: 11.0.0_webpack@5.74.0
       webpack: 5.74.0
     devDependencies:
-      '@crossbell/ipfs-fetch': link:../ipfs-fetch
-      '@crossbell/ipfs-gateway-sw': link:../ipfs-gateway-sw
       next: 12.2.5_biqbaboplfbrettd7655fr4n2y
       react: 18.2.0
       react-dom: 18.2.0_react@18.2.0
@@ -132,14 +130,12 @@ importers:
 
   packages/ipfs-react:
     specifiers:
-      '@crossbell/ipfs-fetch': workspace:*
       '@crossbell/ipfs-gateway': workspace:*
       '@types/react': 18.0.18
       node-fetch: ^3.2.10
       react: ^18.2.0
       vitest: ^0.22.1
     devDependencies:
-      '@crossbell/ipfs-fetch': link:../ipfs-fetch
       '@crossbell/ipfs-gateway': link:../ipfs-gateway
       '@types/react': 18.0.18
       node-fetch: 3.2.10

@@ -1,5 +1,4 @@
-import type { IpfsUrl, Web2Url } from '@crossbell/ipfs-fetch'
-import type { IpfsGateway } from '@crossbell/ipfs-gateway'
+import type { IpfsGateway, IpfsUrl, Web2Url } from '@crossbell/ipfs-gateway'
 
 import { useEffect, useState, useRef } from 'react'
 
