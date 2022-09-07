@@ -18,7 +18,7 @@ export function ipfsFetch(
   ipfsUrl: IpfsUrl,
   {
     gateways = DEFAULT_IPFS_GATEWAYS,
-    timeout = 6000,
+    timeout,
     signal,
     ...fetchConfig
   }: IpfsToFastestWeb2UrlConfig = {},
@@ -32,10 +32,13 @@ export function ipfsFetch(
       abortControllerSet.clear()
     }
 
-    const timeoutId = setTimeout(() => {
-      reject(new Error(IpfsFetchError.timeout))
-      cleanup()
-    }, timeout)
+    const timeoutId =
+      typeof timeout === 'number'
+        ? setTimeout(() => {
+            reject(new Error(IpfsFetchError.timeout))
+            cleanup()
+          }, timeout)
+        : null
 
     signal?.addEventListener('abort', () => {
       reject(new Error(IpfsFetchError.abort))
@@ -70,7 +73,10 @@ export function ipfsFetch(
 
     function cleanup() {
       cancelRequests()
-      clearTimeout(timeoutId)
+
+      if (timeoutId !== null) {
+        clearTimeout(timeoutId)
+      }
     }
   })
 }
