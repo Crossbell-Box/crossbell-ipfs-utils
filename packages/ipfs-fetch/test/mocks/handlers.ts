@@ -12,7 +12,8 @@ export const IPFS_INFO = parseIpfsInfo(IPFS_URL)
 export const [
   SUCCESS_A_IPFS_GATEWAY,
   SUCCESS_B_IPFS_GATEWAY,
-  ERROR_IPFS_GATEWAY,
+  ERROR_A_IPFS_GATEWAY,
+  ERROR_B_IPFS_GATEWAY,
   TIMEOUT_IPFS_GATEWAY,
 ] = DEFAULT_IPFS_GATEWAYS
 
@@ -25,8 +26,12 @@ export const handlers = [
     res(ctx.status(200), ctx.json({ name: 'B' }), ctx.delay(300)),
   ),
 
-  rest.get(fillIpfsGatewayTemplate(ERROR_IPFS_GATEWAY, IPFS_INFO), (_req, res, ctx) =>
+  rest.get(fillIpfsGatewayTemplate(ERROR_A_IPFS_GATEWAY, IPFS_INFO), (_req, res, ctx) =>
     res(ctx.status(404)),
+  ),
+
+  rest.get(fillIpfsGatewayTemplate(ERROR_B_IPFS_GATEWAY, IPFS_INFO), (_req, res, ctx) =>
+    res(ctx.status(404), ctx.delay(1000)),
   ),
 
   rest.get(fillIpfsGatewayTemplate(TIMEOUT_IPFS_GATEWAY, IPFS_INFO), (_req, res, ctx) =>

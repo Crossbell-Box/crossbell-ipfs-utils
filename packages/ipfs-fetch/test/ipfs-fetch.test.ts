@@ -2,19 +2,21 @@ import { expect, describe, it } from 'vitest'
 
 import {
   IPFS_URL,
-  ERROR_IPFS_GATEWAY,
+  ERROR_A_IPFS_GATEWAY,
+  ERROR_B_IPFS_GATEWAY,
   SUCCESS_A_IPFS_GATEWAY,
   SUCCESS_B_IPFS_GATEWAY,
   TIMEOUT_IPFS_GATEWAY,
 } from './mocks/handlers'
 
-import { ipfsFetch, IpfsFetchError } from '../src'
+import { ipfsFetch, IpfsFetchError, IpfsFetchErrorType } from '../src'
 
 describe.concurrent('ipfs-fetch', () => {
   it('should return first success response', async () => {
     const res = await ipfsFetch(IPFS_URL, {
       gateways: [
-        ERROR_IPFS_GATEWAY,
+        ERROR_A_IPFS_GATEWAY,
+        ERROR_B_IPFS_GATEWAY,
         TIMEOUT_IPFS_GATEWAY,
         SUCCESS_B_IPFS_GATEWAY,
         SUCCESS_A_IPFS_GATEWAY,
@@ -25,27 +27,38 @@ describe.concurrent('ipfs-fetch', () => {
     expect(res.status).toBe(200)
   })
 
-  it('should throw timeout error if no success request', async () => {
+  it('should throw error if no success request', async () => {
     try {
       await ipfsFetch(IPFS_URL, {
-        gateways: [ERROR_IPFS_GATEWAY],
-        timeout: 1000,
+        gateways: [ERROR_A_IPFS_GATEWAY, ERROR_B_IPFS_GATEWAY],
       })
     } catch (e) {
-      expect(e).instanceof(Error)
-      expect((e as Error).message).toBe(IpfsFetchError.timeout)
+      expect(e).instanceof(IpfsFetchError)
+      expect((e as IpfsFetchError).message).toBe(IpfsFetchErrorType.allFailed)
     }
   })
 
-  it('should throw timeout error if request timeout', async () => {
+  it('should throw timeout error if request timeout (1)', async () => {
+    try {
+      await ipfsFetch(IPFS_URL, {
+        gateways: [ERROR_A_IPFS_GATEWAY, ERROR_B_IPFS_GATEWAY],
+        timeout: 500,
+      })
+    } catch (e) {
+      expect(e).instanceof(IpfsFetchError)
+      expect((e as IpfsFetchError).message).toBe(IpfsFetchErrorType.timeout)
+    }
+  })
+
+  it('should throw timeout error if request timeout (2)', async () => {
     try {
       await ipfsFetch(IPFS_URL, {
         gateways: [TIMEOUT_IPFS_GATEWAY],
         timeout: 1000,
       })
     } catch (e) {
-      expect(e).instanceof(Error)
-      expect((e as Error).message).toBe(IpfsFetchError.timeout)
+      expect(e).instanceof(IpfsFetchError)
+      expect((e as IpfsFetchError).message).toBe(IpfsFetchErrorType.timeout)
     }
   })
 })
