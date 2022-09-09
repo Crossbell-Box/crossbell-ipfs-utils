@@ -39,8 +39,6 @@ typedSelf.addEventListener('fetch', (event) => {
     event.respondWith(
       ipfsFetch(`ipfs://${url.pathname.substring(gatewayPrefix.length)}`, {
         gateways: gateways.length > 0 ? gateways : undefined,
-        // Gateway `cloudflare-ipfs.com` has redirection issues with some network.
-        redirect: 'error',
       }),
     )
   }
