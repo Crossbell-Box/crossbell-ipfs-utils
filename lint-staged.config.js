@@ -1,4 +1,4 @@
 module.exports = {
-  '**/package.json': ['yarn format:package'],
-  '*.{ts,tsx,html,json}': () => ['yarn format:code', 'yarn lint'],
+  '**/package.json': ['pnpm format:package'],
+  '*.{ts,tsx,html,json}': () => ['pnpm format:code', 'pnpm lint'],
 }
