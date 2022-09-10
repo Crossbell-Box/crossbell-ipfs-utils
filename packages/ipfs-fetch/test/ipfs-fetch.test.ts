@@ -6,7 +6,7 @@ import {
   ERROR_B_IPFS_GATEWAY,
   SUCCESS_A_IPFS_GATEWAY,
   SUCCESS_B_IPFS_GATEWAY,
-  TIMEOUT_IPFS_GATEWAY,
+  INFINITE_IPFS_GATEWAY,
 } from './mocks/handlers'
 
 import { ipfsFetch, IpfsFetchError, IpfsFetchErrorType } from '../src'
@@ -17,7 +17,7 @@ describe.concurrent('ipfs-fetch', () => {
       gateways: [
         ERROR_A_IPFS_GATEWAY,
         ERROR_B_IPFS_GATEWAY,
-        TIMEOUT_IPFS_GATEWAY,
+        INFINITE_IPFS_GATEWAY,
         SUCCESS_B_IPFS_GATEWAY,
         SUCCESS_A_IPFS_GATEWAY,
       ],
@@ -35,30 +35,6 @@ describe.concurrent('ipfs-fetch', () => {
     } catch (e) {
       expect(e).instanceof(IpfsFetchError)
       expect((e as IpfsFetchError).message).toBe(IpfsFetchErrorType.allFailed)
-    }
-  })
-
-  it('should throw timeout error if request timeout (1)', async () => {
-    try {
-      await ipfsFetch(IPFS_URL, {
-        gateways: [ERROR_A_IPFS_GATEWAY, ERROR_B_IPFS_GATEWAY],
-        timeout: 500,
-      })
-    } catch (e) {
-      expect(e).instanceof(IpfsFetchError)
-      expect((e as IpfsFetchError).message).toBe(IpfsFetchErrorType.timeout)
-    }
-  })
-
-  it('should throw timeout error if request timeout (2)', async () => {
-    try {
-      await ipfsFetch(IPFS_URL, {
-        gateways: [TIMEOUT_IPFS_GATEWAY],
-        timeout: 1000,
-      })
-    } catch (e) {
-      expect(e).instanceof(IpfsFetchError)
-      expect((e as IpfsFetchError).message).toBe(IpfsFetchErrorType.timeout)
     }
   })
 })

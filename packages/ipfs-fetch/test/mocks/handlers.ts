@@ -14,7 +14,7 @@ export const [
   SUCCESS_B_IPFS_GATEWAY,
   ERROR_A_IPFS_GATEWAY,
   ERROR_B_IPFS_GATEWAY,
-  TIMEOUT_IPFS_GATEWAY,
+  INFINITE_IPFS_GATEWAY,
 ] = DEFAULT_IPFS_GATEWAYS
 
 export const handlers = [
@@ -34,7 +34,7 @@ export const handlers = [
     res(ctx.status(404), ctx.delay(1000)),
   ),
 
-  rest.get(fillIpfsGatewayTemplate(TIMEOUT_IPFS_GATEWAY, IPFS_INFO), (_req, res, ctx) =>
+  rest.get(fillIpfsGatewayTemplate(INFINITE_IPFS_GATEWAY, IPFS_INFO), (_req, res, ctx) =>
     res(ctx.delay('infinite')),
   ),
 ]

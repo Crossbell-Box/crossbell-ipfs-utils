@@ -2,7 +2,6 @@ import type { IpfsUrl } from './types'
 import type { Web2Info } from './utils'
 
 export enum IpfsFetchErrorType {
-  timeout = 'ipfsFetch timeout',
   abort = 'ipfsFetch abort',
   allFailed = 'ipfsFetch all failed',
 }

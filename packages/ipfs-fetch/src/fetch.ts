@@ -5,19 +5,13 @@ import { IpfsFetchError, IpfsFetchErrorType } from './fetch-error'
 
 export type IpfsToFastestWeb2UrlConfig = RequestInit & {
   gateways?: IpfsGatewayTemplate[]
-  timeout?: number
 }
 
 const NEVER = new Promise<never>(() => {})
 
 export function ipfsFetch(
   ipfsUrl: IpfsUrl,
-  {
-    gateways = DEFAULT_IPFS_GATEWAYS,
-    timeout,
-    signal,
-    ...fetchConfig
-  }: IpfsToFastestWeb2UrlConfig = {},
+  { gateways = DEFAULT_IPFS_GATEWAYS, signal, ...fetchConfig }: IpfsToFastestWeb2UrlConfig = {},
 ): Promise<Response> {
   return new Promise((resolve, reject) => {
     const web2InfoList = ipfsToWeb2InfoList(ipfsUrl, gateways)
@@ -26,11 +20,6 @@ export function ipfsFetch(
 
     const onAllRequestsFailed = () => {
       reject(new IpfsFetchError(IpfsFetchErrorType.allFailed, ipfsUrl, web2InfoList))
-      cleanup()
-    }
-
-    const onTimeout = () => {
-      reject(new IpfsFetchError(IpfsFetchErrorType.timeout, ipfsUrl, web2InfoList))
       cleanup()
     }
 
@@ -43,8 +32,6 @@ export function ipfsFetch(
       resolve(res)
       cleanup()
     }
-
-    const timeoutId = typeof timeout === 'number' ? setTimeout(onTimeout, timeout) : null
 
     signal?.addEventListener('abort', onOutsideAbort)
 
@@ -92,10 +79,6 @@ export function ipfsFetch(
     function cleanup() {
       abortControllerSet.forEach((abortController) => abortController.abort())
       abortControllerSet.clear()
-
-      if (timeoutId !== null) {
-        clearTimeout(timeoutId)
-      }
     }
   })
 }

@@ -60,13 +60,3 @@ ipfsFetch('ipfs://bafkreic5k3zvarbsondfrowy7kpbj6xo7cj25hobksgileqbbupjvvmkoq', 
   gateways,
 })
 ```
-
-##### Custom timeout
-
-```typescript
-import { ipfsFetch } from '@crossbell/ipfs-fetch'
-
-ipfsFetch('ipfs://bafkreic5k3zvarbsondfrowy7kpbj6xo7cj25hobksgileqbbupjvvmkoq', {
-  timeout: 10000,
-})
-```
