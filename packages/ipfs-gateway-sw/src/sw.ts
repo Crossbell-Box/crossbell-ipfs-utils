@@ -39,6 +39,12 @@ typedSelf.addEventListener('fetch', (event) => {
     event.respondWith(
       ipfsFetch(`ipfs://${url.pathname.substring(gatewayPrefix.length)}`, {
         gateways: gateways.length > 0 ? gateways : undefined,
+        headers: event.request.headers,
+        cache: event.request.cache,
+        redirect: event.request.redirect,
+        referrer: event.request.referrer,
+        referrerPolicy: event.request.referrerPolicy,
+        signal: event.request.signal,
       }),
     )
   }
