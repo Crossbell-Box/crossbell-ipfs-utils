@@ -37,4 +37,22 @@ describe.concurrent('ipfs-fetch', () => {
       expect((e as IpfsFetchError).message).toBe(IpfsFetchErrorType.allFailed)
     }
   })
+
+  it('should throw abort error if aborted', async () => {
+    try {
+      const abortController = new AbortController()
+
+      const fetchPromise = ipfsFetch(IPFS_URL, {
+        gateways: [INFINITE_IPFS_GATEWAY],
+        signal: abortController.signal,
+      })
+
+      abortController.abort()
+
+      await fetchPromise
+    } catch (e) {
+      expect(e).instanceof(Error)
+      expect((e as Error).name).toBe('AbortError')
+    }
+  })
 })

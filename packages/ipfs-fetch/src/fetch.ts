@@ -13,72 +13,51 @@ export function ipfsFetch(
   ipfsUrl: IpfsUrl,
   { gateways = DEFAULT_IPFS_GATEWAYS, signal, ...fetchConfig }: IpfsToFastestWeb2UrlConfig = {},
 ): Promise<Response> {
-  return new Promise((resolve, reject) => {
-    const web2InfoList = ipfsToWeb2InfoList(ipfsUrl, gateways)
-    const abortControllerSet = new Set<AbortController>()
-    let failedRequestCount = 0
+  const web2InfoList = ipfsToWeb2InfoList(ipfsUrl, gateways)
+  const abortControllerSet = new Set<AbortController>()
+  let failedRequestCount = 0
 
-    const onAllRequestsFailed = () => {
-      reject(new IpfsFetchError(IpfsFetchErrorType.allFailed, ipfsUrl, web2InfoList))
-      cleanup()
-    }
+  return Promise.race(
+    web2InfoList.map((info) => {
+      const abortController = new AbortController()
 
-    const onOutsideAbort = () => {
-      reject(new IpfsFetchError(IpfsFetchErrorType.abort, ipfsUrl, web2InfoList))
-      cleanup()
-    }
+      abortControllerSet.add(abortController)
+      signal?.addEventListener('abort', () => abortController.abort())
 
-    const onSuccess = (res: Response) => {
-      resolve(res)
-      cleanup()
-    }
+      const checkIfAllRequestsFailed = (): Promise<never> => {
+        failedRequestCount += 1
 
-    signal?.addEventListener('abort', onOutsideAbort)
-
-    Promise.race(
-      web2InfoList.map((info) => {
-        const abortController = new AbortController()
-
-        abortControllerSet.add(abortController)
-
-        function markSuccess(response: Response): Promise<Response> {
-          // Remove current abortController to avoid unexpected abort behavior
-          abortControllerSet.delete(abortController)
-
-          return Promise.resolve(response)
-        }
-
-        function markFailed(): Promise<never> {
-          failedRequestCount += 1
-
-          if (failedRequestCount >= web2InfoList.length) {
-            onAllRequestsFailed()
-          }
-
+        if (failedRequestCount >= web2InfoList.length) {
+          return Promise.reject(
+            new IpfsFetchError(IpfsFetchErrorType.allFailed, ipfsUrl, web2InfoList),
+          )
+        } else {
           return NEVER
         }
+      }
 
-        return (
-          fetch(info.url, { ...fetchConfig, signal: abortController.signal })
-            .then((response) => {
-              // Only resolve successful requests
-              if (response.status === 200) {
-                return markSuccess(response)
-              } else {
-                return markFailed()
-              }
-            })
-            // Ignore fetch errors
-            .catch(() => markFailed())
-        )
-      }),
-    )
-      .then(onSuccess)
-      .finally(cleanup)
+      return fetch(info.url, { ...fetchConfig, signal: abortController.signal })
+        .then((response) => {
+          // Only resolve successful requests
+          if (response.status === 200) {
+            // Remove current abortController to avoid unexpected abort behavior
+            abortControllerSet.delete(abortController)
 
-    function cleanup() {
-      abortControllerSet.forEach((abortController) => abortController.abort())
-      abortControllerSet.clear()
-    }
+            return response
+          } else {
+            return checkIfAllRequestsFailed()
+          }
+        })
+        .catch((err) => {
+          if (err instanceof Error && err.name === 'AbortError') {
+            return Promise.reject(err)
+          } else {
+            return checkIfAllRequestsFailed()
+          }
+        })
+    }),
+  ).finally(() => {
+    abortControllerSet.forEach((abortController) => abortController.abort())
+    abortControllerSet.clear()
   })
 }
