@@ -33,9 +33,8 @@ export type OptionalIpfsGatewayConfig = Partial<{
 export type IpfsGatewaySwStatus = 'disabled' | 'first-time-install' | 'pending-response' | 'ready'
 
 export class IpfsGateway {
-  private readonly fallbackGateway: IpfsGatewayTemplate
-  private readonly config: IpfsGatewayConfig
-
+  readonly fallbackGateway: IpfsGatewayTemplate
+  readonly config: IpfsGatewayConfig
   readonly registration: Promise<boolean>
 
   private _swStatus: IpfsGatewaySwStatus
