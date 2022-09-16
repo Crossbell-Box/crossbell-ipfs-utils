@@ -23,6 +23,7 @@
     "clean": "rm -rf ./dist"
   },
   "dependencies": {
-    "@crossbell/ipfs-fetch": "workspace:*"
+    "@crossbell/ipfs-fetch": "workspace:*",
+    "escape-string-regexp": "^4.0.0"
   }
 }

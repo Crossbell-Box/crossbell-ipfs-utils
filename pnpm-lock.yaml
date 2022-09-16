@@ -125,8 +125,10 @@ importers:
   packages/ipfs-gateway-sw:
     specifiers:
       '@crossbell/ipfs-fetch': workspace:*
+      escape-string-regexp: ^4.0.0
     dependencies:
       '@crossbell/ipfs-fetch': link:../ipfs-fetch
+      escape-string-regexp: 4.0.0
 
   packages/ipfs-react:
     specifiers:
@@ -2059,7 +2061,6 @@ packages:
   /escape-string-regexp/4.0.0:
     resolution: {integrity: sha512-TtpcNJ3XAzx3Gq8sWRzJaVajRs0uVxA2YAkdb1jm2YkPz4G6egUFAyA3n5vtEIZefPk5Wa4UXbKuS5fKkJWdgA==}
     engines: {node: '>=10'}
-    dev: true
 
   /eslint-config-next/12.2.5_shit3uhl6a7megkzgoz6xssnfa:
     resolution: {integrity: sha512-SOowilkqPzW6DxKp3a3SYlrfPi5Ajs9MIzp9gVfUDxxH9QFM5ElkR1hX5m/iICJuvCbWgQqFBiA3mCMozluniw==}
