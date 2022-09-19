@@ -1,4 +1,8 @@
-import { DEFAULT_GATEWAY_PREFIX, DEFAULT_SW_FILENAME } from '@crossbell/ipfs-gateway-sw'
+import {
+  DEFAULT_GATEWAY_PREFIX,
+  DEFAULT_SW_FILENAME,
+  swGatewayUrlToIpfsUrl,
+} from '@crossbell/ipfs-gateway-sw'
 import {
   DEFAULT_IPFS_GATEWAYS,
   parseIpfsInfo,
@@ -121,6 +125,35 @@ export class IpfsGateway {
     const ipfsInfo = parseIpfsInfo(ipfsUrl)
 
     return ipfsInfo && fillIpfsGatewayTemplate(this.fallbackGateway, ipfsInfo)
+  }
+
+  convertToIpfsUrl(url: string): IpfsUrl | null {
+    const gatewayPrefix = this.config.serviceWorker?.gatewayPrefix
+
+    if (isIpfsUrl(url)) {
+      return url
+    } else if (gatewayPrefix) {
+      return swGatewayUrlToIpfsUrl(gatewayPrefix, url)
+    } else {
+      return null
+    }
+  }
+
+  async openIpfsUrl(
+    ipfsUrl: IpfsUrl,
+    target?: string,
+    features?: string,
+  ): Promise<WindowProxy | null> {
+    const newWindow = window.open('', target, features)
+
+    if (newWindow) {
+      await this.getFastestWeb2Url(ipfsUrl)
+        .catch(() => null)
+        .then((url) => url ?? this.getFallbackWeb2Url(ipfsUrl))
+        .then((url) => (newWindow.location.href = url))
+    }
+
+    return newWindow
   }
 }
 
