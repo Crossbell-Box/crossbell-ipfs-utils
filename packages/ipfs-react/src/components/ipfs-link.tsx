@@ -7,19 +7,8 @@ export type IpfsLinkProps = React.ComponentProps<typeof IpfsLink>
 export const IpfsLink = React.forwardRef<
   HTMLAnchorElement,
   React.AnchorHTMLAttributes<HTMLAnchorElement>
->(({ onClick: onClick_, ...props }, ref) => {
-  const handleLinkClick = useHandleLinkClick()
+>((props, ref) => {
+  const handleClick = useHandleLinkClick(props.onClick)
 
-  const onClick = React.useCallback(
-    (event: React.MouseEvent<HTMLAnchorElement, MouseEvent>) => {
-      onClick_?.(event)
-
-      if (!event.defaultPrevented) {
-        handleLinkClick(event)
-      }
-    },
-    [handleLinkClick, onClick_],
-  )
-
-  return <a {...props} onClick={onClick} ref={ref} />
+  return <a {...props} onClick={handleClick} ref={ref} />
 })
