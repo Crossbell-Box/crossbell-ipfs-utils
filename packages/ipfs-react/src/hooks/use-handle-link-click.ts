@@ -1,37 +1,23 @@
-import { isIpfsUrl, swGatewayUrlToIpfsUrl } from '@crossbell/ipfs-gateway'
 import React from 'react'
 
 import { useIpfsGateway } from './use-ipfs-gateway'
 
-export function useHandleLinkClick() {
+export function useHandleLinkClick(onClick?: React.MouseEventHandler<HTMLAnchorElement>) {
   const ipfsGateway = useIpfsGateway()
+  const onClickRef = React.useRef(onClick)
+
+  onClickRef.current = onClick
 
   return React.useCallback(
-    (event: React.MouseEvent<HTMLAnchorElement>) => {
-      const elm = event.currentTarget
-      const link = elm.href
-      const gatewayPrefix = ipfsGateway.config.serviceWorker?.gatewayPrefix
-      const ipfsUrl = (() => {
-        if (isIpfsUrl(link)) {
-          return link
-        } else if (gatewayPrefix) {
-          return swGatewayUrlToIpfsUrl(gatewayPrefix, link)
-        } else {
-          return null
-        }
-      })()
+    (event: React.MouseEvent<HTMLAnchorElement, MouseEvent>) => {
+      onClickRef.current?.(event)
 
-      if (ipfsUrl) {
-        const newWindow = window.open()
+      if (!event.defaultPrevented) {
+        const ipfsUrl = ipfsGateway.convertToIpfsUrl(event.currentTarget.href)
 
-        if (newWindow) {
+        if (ipfsUrl) {
           event.preventDefault()
-
-          ipfsGateway
-            .getFastestWeb2Url(ipfsUrl)
-            .catch(() => null)
-            .then((url) => url ?? ipfsGateway.getFallbackWeb2Url(ipfsUrl))
-            .then((url) => (newWindow.location.href = url))
+          ipfsGateway.openIpfsUrl(ipfsUrl)
         }
       }
     },
