@@ -1,7 +1,7 @@
 import React from 'react'
 import { useIsomorphicLayoutEffect } from 'react-use'
 
-import { useHandleLinkClick } from '@crossbell/ipfs-react'
+import { IpfsLink } from '@crossbell/ipfs-react'
 
 export type ResourceCardProps = {
   cid: string
@@ -12,7 +12,6 @@ export type ResourceCardProps = {
 export function ImgCard({ cid, src, alt }: ResourceCardProps) {
   const startTime = React.useMemo(() => Date.now(), [])
   const trimmedCID = React.useMemo(() => cid.replace(/^(\w{2})\w+(\w{2})$/, '$1...$2'), [cid])
-  const handleLinkClick = useHandleLinkClick()
 
   const [duration, setDuration] = React.useState(0)
 
@@ -63,15 +62,9 @@ export function ImgCard({ cid, src, alt }: ResourceCardProps) {
           </svg>
         )}
       </p>
-      <a
-        href={src}
-        target="_blank"
-        onClick={handleLinkClick}
-        className="hover:underline"
-        rel="noreferrer"
-      >
+      <IpfsLink href={src} target="_blank" className="hover:underline" rel="noreferrer">
         <p className="m-0 break-all font-mono text-xs opacity-60">{src.replace(cid, trimmedCID)}</p>
-      </a>
+      </IpfsLink>
     </div>
   )
 }
