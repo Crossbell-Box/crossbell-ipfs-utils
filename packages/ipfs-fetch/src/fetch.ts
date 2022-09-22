@@ -39,7 +39,7 @@ export function ipfsFetch(
       return fetch(info.url, { ...fetchConfig, signal: abortController.signal })
         .then((response) => {
           // Only resolve successful requests
-          if (response.status === 200) {
+          if (response.ok) {
             // Remove current abortController to avoid unexpected abort behavior
             abortControllerSet.delete(abortController)
 
