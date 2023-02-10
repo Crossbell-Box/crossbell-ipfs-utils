@@ -16,8 +16,8 @@
   ],
   "scripts": {
     "build": "npm run clean && run-p build:sw build:cjs build:esm",
-    "build:cjs": "tsc -p tsconfig.json -m CommonJS --outDir dist/cjs",
-    "build:esm": "tsc -p tsconfig.json -m ESNext --outDir dist/esm",
+    "build:cjs": "tsc -p tsconfig.build.json -m CommonJS --outDir dist/cjs",
+    "build:esm": "tsc -p tsconfig.build.json -m ESNext --outDir dist/esm",
     "build:sw": "node build-sw.js --minify",
     "build:sw-watch": "node build-sw.js --watch",
     "clean": "rm -rf ./dist"

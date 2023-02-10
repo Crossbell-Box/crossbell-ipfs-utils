@@ -11,22 +11,22 @@
   "dependencies": {
     "@crossbell/ipfs-gateway": "workspace:*",
     "@crossbell/ipfs-react": "workspace:*",
-    "next": "12.2.5",
+    "next": "13.1.6",
     "react": "18.2.0",
     "react-dom": "18.2.0",
     "react-use": "^17.4.0"
   },
   "devDependencies": {
     "@crossbell/ipfs-gateway-next": "workspace:*",
-    "@types/node": "^18.7.14",
-    "@types/react": "18.0.18",
-    "@types/react-dom": "18.0.6",
-    "autoprefixer": "^10.4.8",
-    "eslint": "8.22.0",
-    "eslint-config-next": "12.2.5",
-    "postcss": "^8.4.16",
-    "tailwindcss": "^3.1.8",
-    "typescript": "^4.8.2",
-    "webpack": "^5.74.0"
+    "@types/node": "^18.13.0",
+    "@types/react": "18.0.27",
+    "@types/react-dom": "18.0.10",
+    "autoprefixer": "^10.4.13",
+    "eslint": "8.34.0",
+    "eslint-config-next": "13.1.6",
+    "postcss": "^8.4.21",
+    "tailwindcss": "^3.2.6",
+    "typescript": "^4.9.5",
+    "webpack": "^5.75.0"
   }
 }
