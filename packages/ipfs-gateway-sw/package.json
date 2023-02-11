@@ -7,20 +7,29 @@
   "homepage": "https://github.com/Crossbell-Box/crossbell-monorepo#readme",
   "author": "Natural Selection Labs",
   "keywords": [],
-  "main": "dist/cjs/index.js",
-  "module": "dist/esm/index.js",
-  "typings": "dist/esm/index.d.ts",
+  "main": "dist/index.js",
+  "module": "dist/index.mjs",
+  "typings": "dist/index.d.ts",
+  "sideEffects": false,
   "files": [
     "dist",
     "package.json"
   ],
   "scripts": {
-    "build": "npm run clean && run-p build:sw build:cjs build:esm",
-    "build:cjs": "tsc -p tsconfig.build.json -m CommonJS --outDir dist/cjs",
-    "build:esm": "tsc -p tsconfig.build.json -m ESNext --outDir dist/esm",
+    "build": "run-s clean build:ts build:sw",
     "build:sw": "node build-sw.js --minify",
     "build:sw-watch": "node build-sw.js --watch",
+    "build:ts": "tsup",
     "clean": "rm -rf ./dist"
+  },
+  "exports": {
+    ".": {
+      "import": "./dist/index.mjs",
+      "require": "./dist/index.js",
+      "types": "./dist/index.d.ts"
+    },
+    "./package.json": "./package.json",
+    "./sw.js": "./dist/index.js"
   },
   "dependencies": {
     "@crossbell/ipfs-fetch": "workspace:*",

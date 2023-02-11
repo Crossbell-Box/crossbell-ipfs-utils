@@ -1,0 +1,29 @@
+{
+  "compilerOptions": {
+    "declaration": true,
+    "declarationMap": true,
+    "strict": true,
+    "noUnusedParameters": true,
+    "noUnusedLocals": true,
+    "noImplicitAny": true,
+    "esModuleInterop": true,
+    "resolveJsonModule": true,
+    "skipLibCheck": true,
+    "moduleResolution": "node",
+    "module": "ESNext",
+    "target": "ESNext",
+    "jsx": "react",
+    "baseUrl": ".",
+    "paths": {
+      "~/scripts/*": ["scripts/*"],
+      "@crossbell/*": ["packages/*/src"]
+    }
+  },
+  "references": [
+    { "path": "packages/ipfs-fetch/tsconfig.json" },
+    { "path": "packages/ipfs-gateway/tsconfig.json" },
+    { "path": "packages/ipfs-gateway-next/tsconfig.json" },
+    { "path": "packages/ipfs-gateway-sw/tsconfig.json" },
+    { "path": "packages/ipfs-react/tsconfig.json" }
+  ]
+}
