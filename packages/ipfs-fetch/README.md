@@ -1,7 +1,7 @@
 # @crossbell/ipfs-fetch
 
 <p align="left">
-  <a href="https://github.com/Crossbell-Box/crossbell-monorepo/blob/main/LICENSE">
+  <a href="https://github.com/Crossbell-Box/crossbell-ipfs-utils/blob/main/LICENSE">
     <img src="https://img.shields.io/npm/l/@crossbell/ipfs-fetch?colorA=373737&colorB=0A70E9&style=flat" alt="GitHub license" />
   </a>
   <a href="https://www.npmjs.com/package/@crossbell/ipfs-fetch">
@@ -50,7 +50,7 @@ ipfsFetch('ipfs://bafkreic5k3zvarbsondfrowy7kpbj6xo7cj25hobksgileqbbupjvvmkoq')
 ```typescript
 import { ipfsFetch, IpfsGatewayTemplate } from '@crossbell/ipfs-fetch'
 
-// Default gateways: https://github.com/Crossbell-Box/crossbell-monorepo/blob/main/packages/ipfs-fetch/src/constant.ts
+// Default gateways: https://github.com/Crossbell-Box/crossbell-ipfs-utils/blob/main/packages/ipfs-fetch/src/constant.ts
 const gateways: IpfsGatewayTemplate[] = [
   'https://{cid}.ipfs.cf-ipfs.com/{pathToResource}',
   'https://ipfs.io/ipfs/{cid}{pathToResource}',

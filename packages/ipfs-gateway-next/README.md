@@ -1,7 +1,7 @@
 # @crossbell/ipfs-gateway-next
 
 <p align="left">
-  <a href="https://github.com/Crossbell-Box/crossbell-monorepo/blob/main/LICENSE">
+  <a href="https://github.com/Crossbell-Box/crossbell-ipfs-utils/blob/main/LICENSE">
     <img src="https://img.shields.io/npm/l/@crossbell/ipfs-gateway-next?colorA=373737&colorB=0A70E9&style=flat" alt="GitHub license" />
   </a>
   <a href="https://www.npmjs.com/package/@crossbell/ipfs-gateway-next">
