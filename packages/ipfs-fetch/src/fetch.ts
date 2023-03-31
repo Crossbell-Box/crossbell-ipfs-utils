@@ -1,6 +1,6 @@
 import type { IpfsUrl, IpfsGatewayTemplate } from './types'
 import { DEFAULT_IPFS_GATEWAYS } from './constant'
-import { ipfsToWeb2InfoList } from './utils'
+import { ipfsToWeb2InfoList, Web2Info } from './utils'
 import { IpfsFetchError, IpfsFetchErrorType } from './fetch-error'
 
 export type IpfsToFastestWeb2UrlConfig = RequestInit & {
@@ -12,7 +12,7 @@ const NEVER = new Promise<never>(() => {})
 export function ipfsFetch(
   ipfsUrl: IpfsUrl,
   { gateways = DEFAULT_IPFS_GATEWAYS, signal, ...fetchConfig }: IpfsToFastestWeb2UrlConfig = {},
-): Promise<Response> {
+): Promise<Response & { _info: Web2Info }> {
   const web2InfoList = ipfsToWeb2InfoList(ipfsUrl, gateways)
   const abortControllerSet = new Set<AbortController>()
   let failedRequestCount = 0
@@ -43,7 +43,7 @@ export function ipfsFetch(
             // Remove current abortController to avoid unexpected abort behavior
             abortControllerSet.delete(abortController)
 
-            return response
+            return Object.assign(response, { _info: info })
           } else {
             return checkIfAllRequestsFailed()
           }

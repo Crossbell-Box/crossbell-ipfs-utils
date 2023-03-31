@@ -14,6 +14,7 @@ declare const BUILD_TIME: string // Injected in build phase
 
 let gateways: IpfsGatewayTemplate[] = []
 let gatewayPrefix = DEFAULT_GATEWAY_PREFIX
+let preferredGateway: IpfsGatewayTemplate | null = null
 
 // eslint-disable-next-line no-console
 console.log(`version: ${PKG_VERSION}; build at: ${BUILD_TIME}`)
@@ -23,6 +24,7 @@ typedSelf.addEventListener('install', (event) => {
 
   gatewayPrefix = (params.get('gatewayPrefix') as GatewayPrefix) ?? gatewayPrefix
   gateways = (params.getAll('gateways') as IpfsGatewayTemplate[]) ?? []
+  preferredGateway = gateways[0] ?? null
 
   event.waitUntil(typedSelf.skipWaiting())
 })
@@ -37,12 +39,31 @@ typedSelf.addEventListener('fetch', (event) => {
 
   if (url.origin === typedSelf.location.origin && url.pathname.startsWith(gatewayPrefix)) {
     event.respondWith(
-      ipfsFetch(`ipfs://${url.pathname.substring(gatewayPrefix.length)}`, {
-        gateways: gateways.length > 0 ? gateways : undefined,
-        cache: event.request.cache,
-        redirect: event.request.redirect,
-        signal: event.request.signal,
-      }),
+      (async (): Promise<Response> => {
+        const _fetch = (gateways: IpfsGatewayTemplate[] | undefined) =>
+          ipfsFetch(`ipfs://${url.pathname.substring(gatewayPrefix.length)}`, {
+            gateways,
+            cache: event.request.cache,
+            redirect: event.request.redirect,
+            signal: event.request.signal,
+          })
+
+        const fallbackFetch = () =>
+          _fetch(gateways.length > 0 ? gateways : undefined).then((res) => {
+            preferredGateway = res?._info?.gateway ?? null
+            return res
+          })
+
+        if (preferredGateway) {
+          return _fetch([preferredGateway]).catch((err) => {
+            console.error(err)
+            preferredGateway = null
+            return fallbackFetch()
+          })
+        } else {
+          return fallbackFetch()
+        }
+      })(),
     )
   }
 })
