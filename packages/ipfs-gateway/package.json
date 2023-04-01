@@ -26,6 +26,6 @@
   "dependencies": {
     "@crossbell/ipfs-fetch": "workspace:*",
     "@crossbell/ipfs-gateway-sw": "workspace:*",
-    "query-string": "^7.1.3"
+    "query-string": "^8.1.0"
   }
 }

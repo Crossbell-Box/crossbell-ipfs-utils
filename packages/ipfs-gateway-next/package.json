@@ -32,7 +32,7 @@
     "@crossbell/ipfs-gateway-sw": "workspace:*",
     "@crossbell/ipfs-fetch": "workspace:*",
     "copy-webpack-plugin": "^11.0.0",
-    "webpack": "^5.75.0"
+    "webpack": "^5.77.0"
   },
   "peerDependencies": {
     "next": "^12"
@@ -40,7 +40,7 @@
   "devDependencies": {
     "@crossbell/ipfs-gateway-sw": "workspace:*",
     "@crossbell/ipfs-fetch": "workspace:*",
-    "next": "^13.1.6",
+    "next": "^13.2.4",
     "react": "^18.2.0",
     "react-dom": "^18.2.0"
   }

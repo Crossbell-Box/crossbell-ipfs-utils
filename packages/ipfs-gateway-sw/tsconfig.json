@@ -1,4 +1,7 @@
 {
   "extends": "../../tsconfig.json",
-  "include": ["src/**/*", "./build-sw.ts"]
+  "include": ["src/**/*", "./build-sw.ts"],
+  "compilerOptions": {
+    "lib": ["webworker"]
+  }
 }
