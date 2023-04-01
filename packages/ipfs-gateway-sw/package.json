@@ -29,7 +29,7 @@
       "types": "./dist/index.d.ts"
     },
     "./package.json": "./package.json",
-    "./sw.js": "./dist/index.js"
+    "./sw.js": "./dist/sw.js"
   },
   "dependencies": {
     "@crossbell/ipfs-fetch": "workspace:*",
