@@ -43,7 +43,7 @@ typedSelf.addEventListener('fetch', (event) => {
         const _fetch = (gateways: IpfsGatewayTemplate[] | undefined) =>
           ipfsFetch(`ipfs://${url.pathname.substring(gatewayPrefix.length)}`, {
             gateways,
-            cache: event.request.cache,
+            cache: 'force-cache',
             redirect: event.request.redirect,
             signal: event.request.signal,
           })
