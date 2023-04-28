@@ -14,8 +14,9 @@ export const [
   SUCCESS_B_IPFS_GATEWAY,
   ERROR_A_IPFS_GATEWAY,
   ERROR_B_IPFS_GATEWAY,
-  INFINITE_IPFS_GATEWAY,
 ] = DEFAULT_IPFS_GATEWAYS
+
+export const INFINITE_IPFS_GATEWAY = 'https://localhost.com/ipfs/{cid}{pathToResource}'
 
 export const handlers = [
   rest.get(fillIpfsGatewayTemplate(SUCCESS_A_IPFS_GATEWAY, IPFS_INFO), (_req, res, ctx) =>
