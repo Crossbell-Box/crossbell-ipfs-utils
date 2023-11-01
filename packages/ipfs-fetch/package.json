@@ -27,7 +27,7 @@
     "./package.json": "./package.json"
   },
   "devDependencies": {
-    "node-fetch": "^3.3.0",
-    "vitest": "^0.28.4"
+    "node-fetch": "^3.3.2",
+    "vitest": "^0.34.6"
   }
 }
