@@ -1,4 +1,4 @@
-import { rest } from 'msw'
+import { http, delay, HttpResponse } from 'msw'
 
 import { IpfsUrl } from '../../src'
 import { DEFAULT_IPFS_GATEWAYS } from '../../src/constant'
@@ -19,23 +19,25 @@ export const [
 export const INFINITE_IPFS_GATEWAY = 'https://localhost.com/ipfs/{cid}{pathToResource}'
 
 export const handlers = [
-  rest.get(fillIpfsGatewayTemplate(SUCCESS_A_IPFS_GATEWAY, IPFS_INFO), (_req, res, ctx) =>
-    res(ctx.status(200), ctx.json({ name: 'A' })),
-  ),
+  http.get(fillIpfsGatewayTemplate(SUCCESS_A_IPFS_GATEWAY, IPFS_INFO), () => {
+    return HttpResponse.json({ name: 'A' })
+  }),
 
-  rest.get(fillIpfsGatewayTemplate(SUCCESS_B_IPFS_GATEWAY, IPFS_INFO), (_req, res, ctx) =>
-    res(ctx.status(200), ctx.json({ name: 'B' }), ctx.delay(300)),
-  ),
+  http.get(fillIpfsGatewayTemplate(SUCCESS_B_IPFS_GATEWAY, IPFS_INFO), async () => {
+    await delay(300)
+    return HttpResponse.json({ name: 'B' })
+  }),
 
-  rest.get(fillIpfsGatewayTemplate(ERROR_A_IPFS_GATEWAY, IPFS_INFO), (_req, res, ctx) =>
-    res(ctx.status(404)),
-  ),
+  http.get(fillIpfsGatewayTemplate(ERROR_A_IPFS_GATEWAY, IPFS_INFO), () => {
+    return new HttpResponse(null, { status: 404 })
+  }),
 
-  rest.get(fillIpfsGatewayTemplate(ERROR_B_IPFS_GATEWAY, IPFS_INFO), (_req, res, ctx) =>
-    res(ctx.status(404), ctx.delay(1000)),
-  ),
+  http.get(fillIpfsGatewayTemplate(ERROR_B_IPFS_GATEWAY, IPFS_INFO), async () => {
+    await delay(1000)
+    return new HttpResponse(null, { status: 404 })
+  }),
 
-  rest.get(fillIpfsGatewayTemplate(INFINITE_IPFS_GATEWAY, IPFS_INFO), (_req, res, ctx) =>
-    res(ctx.delay('infinite')),
-  ),
+  http.get(fillIpfsGatewayTemplate(INFINITE_IPFS_GATEWAY, IPFS_INFO), async () => {
+    await delay('infinite')
+  }),
 ]
