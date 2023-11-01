@@ -35,7 +35,7 @@
     "webpack": "^5.89.0"
   },
   "peerDependencies": {
-    "next": "^12 || ^13"
+    "next": "^12 || ^13 || ^14"
   },
   "devDependencies": {
     "@crossbell/ipfs-gateway-sw": "workspace:*",
